@@ -34,14 +34,11 @@ except Exception as e:
         print "Exitting after Cleanup..."
         data.close()
         exit(1)
-print data.dtypes
-print data.describe
 
 for x in ['a1','a8','h1','h8']:
     del data[x]
     del testdata[x]
 
-print data
 
 ## Separate features and results in training dataset
 print "Processing training dataset"
