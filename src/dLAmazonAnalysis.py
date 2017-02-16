@@ -5,6 +5,8 @@ import re
 import string
 import subprocess
 import pandas as pd
+import sklearn.neural_network as sknn
+from datetime import datetime as dt
 from nltk.probability import FreqDist as nF
 from textblob import TextBlob
 from collections import Counter
@@ -12,12 +14,15 @@ from nltk.corpus import stopwords
 from nltk import bigrams
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
+from sklearn.utils.validation import column_or_1d
 from nltk.tokenize import word_tokenize
 
 ##Global variables
 stopWords=[]
 dataSet=[]
 decisionAttributes=[]
+i=dt.now()
+seed=int(i.strftime("%H%M%S"))
 
 ## Function that initalizes the system
 def initializeSystem():
@@ -160,20 +165,23 @@ testSparseMatrix=prepareSparseMatrix(convertReviews(testReview))
 dataFeatures = pd.DataFrame(trainSparseMatrix,columns=decisionAttributes)
 testDataFeatures = pd.DataFrame(testSparseMatrix,columns=decisionAttributes)
 
-dt = DecisionTreeClassifier(min_samples_split=5, random_state=9, max_depth=16)
-dt.fit(dataFeatures,targetRating)
+mlp=sknn.MLPClassifier(activation='tanh',random_state=seed,shuffle=True,learning_rate_init=0.001,solver='adam')
+mlp.fit(dataFeatures,column_or_1d(targetRating, warn=True))
+#dt = DecisionTreeClassifier(min_samples_split=5, random_state=9, max_depth=16)
+#dt.fit(dataFeatures,targetRating)
 
 ## Predict the test data based on the decision tree built.
 print "Predicting..."
 s=f=0
 print "------------------------------------------------------------\n\n"
-predictedRating = list(dt.predict(testDataFeatures))
+predictedRating = list(mlp.predict(testDataFeatures))
 for i in range(len(predictedRating)):
 	if predictedRating[i] == testRating[i]:
 		s+=1
 	else :
 		f+=1
 print "Percentage of data that is predicted CORRECT is : "+str(float(s)/len(predictedRating)*100.0)
+print "Prediction rate is "+str(mlp.score(testDataFeatures,testRating)*100)
 print "Percentage of data that is predicted WRONG is : "+str(float(f)/len(predictedRating)*100.0)
 
 print "\n\n------------------------------------------------------------"
