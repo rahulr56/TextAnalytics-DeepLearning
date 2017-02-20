@@ -6,7 +6,7 @@
 
 * Works on Linux environment only.
 * 1.0
-* [Learn Markdown](http://scikit-learn.org/stable/modules/tree.html)
+* [Neural network models](http://scikit-learn.org/stable/modules/neural_networks_supervised.html)
 
 ### Contents ###
 1.    SETUP
@@ -17,7 +17,7 @@
 6.    REPO OWNERS AND ADMINS 
 
 ###  SETUP ###
-* Clone the repo at [TEXT ANALYTICS] (https://github.com/rahulr56/TextAnalytics.git)
+* Clone the repo at [TEXT ANALYTICS-DEEPLEARNING] (https://github.com/rahulr56/TextAnalytics-DeepLearning)
 * Navigate to build directory and run build.sh
 * The file ourNeuralNetDigitRecognition.py has to be run with PYTHON3.x
 
