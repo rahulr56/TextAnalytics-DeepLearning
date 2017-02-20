@@ -2,7 +2,6 @@ print "Setting up system"
 print "Importing libraries"
 import pandas as pd
 import subprocess
-from sklearn.tree import DecisionTreeClassifier, export_graphviz
 import sklearn.neural_network as sknn
 from datetime import datetime as dt
 from sklearn.utils.validation import column_or_1d
@@ -46,19 +45,12 @@ targetDataResult = (data['result']).reshape(-1,1)
 targetFeatures = list(data.columns[:-1])
 targetDataFeatures=data[targetFeatures]
 
-## Fit the training data set into decision tree classifier
-## This builds us a decision tree
-print "Building a decision tree from training data"
-#mlp=sknn.MLPClassifier(activation='relu',random_state=100,shuffle=True,learning_rate_init=5,verbose=True)
-####mlp=sknn.MLPClassifier(activation='tanh',random_state=seed,shuffle=True,learning_rate_init=0.009)
+## Fit the training data set into Multi Layer Perceptron classifier
+## This builds us a Neural Network
+print "Building a Neural Network from training data"
 
-mlp=sknn.MLPClassifier(activation='tanh',random_state=seed,shuffle=True,learning_rate_init=0.001,solver='adam')
-
-#mlp.fit(targetDataFeatures,targetDataResult)
+mlp=sknn.MLPClassifier(activation='tanh',hidden_layer_sizes=20,random_state=seed,shuffle=True,learning_rate_init=0.001,solver='adam')
 mlp.fit(targetDataFeatures,column_or_1d(data['result'], warn=True))
-
-#dt = DecisionTreeClassifier(min_samples_split=15, random_state=9)
-#dt.fit(targetDataFeatures,targetDataResult)
 
 print "Processing test dataset"
 ## Separate features and results in Test dataset
@@ -67,7 +59,7 @@ testFeatureList = list(testdata.columns[:-1])
 testResults=testdata['result']
 testFeatures=testdata[testFeatureList]
 
-## Predict test data beased on the decision tree formed from training dataset
+## Predict test data based on the Neural Network formed from training dataset
 predictedTestResults=list(mlp.predict(testFeatures))
 
 actualTestResults=list(testResults)
@@ -87,10 +79,6 @@ print "Prediction rate is "+str(mlp.score(testFeatures,testResults)*100)
 print "Prediction rate is "+str(float(s)/len(actualTestResults)*100.0)
 print "\n"
 print "--------------------------------------------------------------------------"
-#
-#print "Visualizing text of decision tree is stored in DigitalImageRecognitionDecisonTree.dot file"
-#with open("DigitalImageRecognitionDecisonTree.dot", 'w') as f:
-#	export_graphviz(dt, out_file=f,feature_names=testFeatureList)
 
 #while True:
 #    ans=raw_input("Do you want to predict a digit?(Y/N) ").strip()

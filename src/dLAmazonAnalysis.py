@@ -13,7 +13,6 @@ from collections import Counter
 from nltk.corpus import stopwords
 from nltk import bigrams
 from nltk.stem import PorterStemmer, WordNetLemmatizer
-from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.utils.validation import column_or_1d
 from nltk.tokenize import word_tokenize
 
@@ -161,16 +160,14 @@ trainSparseMatrix = prepareSparseMatrix(trainReviews)
 ## Build a sparse matrix using the reviews from testing dataset
 testSparseMatrix=prepareSparseMatrix(convertReviews(testReview))
 
-## Build a decision tree
+## Build a Neural Network
 dataFeatures = pd.DataFrame(trainSparseMatrix,columns=decisionAttributes)
 testDataFeatures = pd.DataFrame(testSparseMatrix,columns=decisionAttributes)
 
 mlp=sknn.MLPClassifier(activation='tanh',random_state=seed,shuffle=True,learning_rate_init=0.001,solver='adam')
 mlp.fit(dataFeatures,column_or_1d(targetRating, warn=True))
-#dt = DecisionTreeClassifier(min_samples_split=5, random_state=9, max_depth=16)
-#dt.fit(dataFeatures,targetRating)
 
-## Predict the test data based on the decision tree built.
+## Predict the test data based on the Neural Network built.
 print "Predicting..."
 s=f=0
 print "------------------------------------------------------------\n\n"
@@ -180,15 +177,12 @@ for i in range(len(predictedRating)):
 		s+=1
 	else :
 		f+=1
-print "Percentage of data that is predicted CORRECT is : "+str(float(s)/len(predictedRating)*100.0)
 print "Prediction rate is "+str(mlp.score(testDataFeatures,testRating)*100)
+print "Percentage of data that is predicted CORRECT is : "+str(float(s)/len(predictedRating)*100.0)
 print "Percentage of data that is predicted WRONG is : "+str(float(f)/len(predictedRating)*100.0)
 
 print "\n\n------------------------------------------------------------"
-## Tree Visualization
-#with open("AmazonDT.dot", 'w') as f:
-#	export_graphviz(dt, out_file=f,feature_names=trainSparseMatrix)
-#command = ["dot", "-Tpng", "dt.dot", "-o", "dt.png"]
+
 while True:
     ans=raw_input("Do you want to predict a review?(Y/N) ").strip()
     if ans=='Y' or ans=='y':
