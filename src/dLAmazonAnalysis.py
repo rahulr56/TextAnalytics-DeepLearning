@@ -134,14 +134,14 @@ initializeSystem()
 
 
 print "Analysing training dataset.."
-loadFile("../DataSet/AmazonDataSet/part_amazon_baby_train.csv")
+loadFile("../DataSet/AmazonDataSet/amazon_baby_train.csv")
 ## Parse the training dataset read from the file
 trainDataFeaturesReviews = pd.DataFrame(dataSet,columns=["review","rating"])
 targetRating = (trainDataFeaturesReviews['rating']).reshape(-1,1)
 targetReview = trainDataFeaturesReviews['review']
 
 print "Analysing testing dataset.."
-loadFile("../DataSet/AmazonDataSet/part_amazon_baby_test.csv")
+loadFile("../DataSet/AmazonDataSet/amazon_baby_test.csv")
 ## Parse the testing dataset read from the file
 testDataFeaturesReviews = pd.DataFrame(dataSet,columns=["review","rating"])
 testReview = testDataFeaturesReviews['review']
