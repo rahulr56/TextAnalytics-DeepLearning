@@ -2,7 +2,7 @@
 
 # README #
 
-### Neural Network###
+### Neural Network ###
 
 * Works on Linux environment only.
 * 1.0
